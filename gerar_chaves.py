@@ -1,4 +1,4 @@
-# gerar_chaves.py
+# gerar_chaves.py 
 
 from utils import eh_primo, gerar_primo, calcular_mdc, calcular_inverso_modular
 
@@ -7,43 +7,62 @@ print("=== GERADOR DE CHAVES RSA ===")
 escolha = input("Deseja inserir os primos manualmente? (s/n): ")
 
 # Escolha dos primos
-if escolha == 's':
-    p = int(input("Digite o valor de p: "))
-    q = int(input("Digite o valor de q: "))
+if escolha.lower() == 's':
+    while True:
+        try:
+            p = int(input("Digite o valor de p: "))
+            q = int(input("Digite o valor de q: "))
 
-    # Validação dos primos
-    if not eh_primo(p) or not eh_primo(q):
-        print("Erro: p e q precisam ser primos!")
-        exit()
+            if not eh_primo(p) or not eh_primo(q):
+                print("❌ Erro: p e q precisam ser números primos.")
+                continue
 
-    if p == q:
-        print("Erro: p e q não podem ser iguais!")
-        exit()
+            if p == q:
+                print("❌ Erro: p e q não podem ser iguais.")
+                continue
+
+            if (p * q) < 128:
+                print("❌ Erro: n muito pequeno para ASCII.")
+                continue
+
+            break
+
+        except ValueError:
+            print("❌ Erro: Digite apenas números inteiros.")
 
 else:
-    p = gerar_primo()
-    q = gerar_primo()
-
-    while p == q:
+    while True:
+        p = gerar_primo()
         q = gerar_primo()
+
+        if p != q:
+            n = p * q
+
+            # garante que n é grande o suficiente
+            if n >= 256:
+                break
 
     print(f"Primos gerados automaticamente: p={p}, q={q}")
 
-# Cálculo de n
+# Agora calcula tudo uma vez só
 n = p * q
-
-# Cálculo do phi
 phi = (p - 1) * (q - 1)
 
-# Escolha do e (coprimo com phi)
+# Escolha de e
 e = 3
-while calcular_mdc(e, phi) != 1:
+while e < phi:
+    if calcular_mdc(e, phi) == 1:
+        break
     e += 1
 
-# Cálculo da chave privada d
+# Cálculo do d
 d = calcular_inverso_modular(e, phi)
 
-# Exibição das chaves
+if d is None:
+    print("Erro ao calcular d.")
+    exit()
+
+# Exibição
 print("\n=== CHAVES GERADAS ===")
 print(f"Chave Pública (n, e): ({n}, {e})")
 print(f"Chave Privada (n, d): ({n}, {d})")

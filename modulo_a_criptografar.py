@@ -1,33 +1,60 @@
 # modulo_a_criptografar.py
 
+import os
+
 print("=== MÓDULO A - CRIPTOGRAFAR ===")
 
-# Entrada de dados
+# Entrada da mensagem
 mensagem = input("Digite a mensagem: ")
-n = int(input("Digite o valor de n: "))
-e = int(input("Digite o valor de e: "))
+
+if not mensagem:
+    print("❌ Erro: a mensagem não pode estar vazia.")
+    exit()
+
+# Entrada da chave pública
+try:
+    n = int(input("Digite o valor de n: "))
+    e = int(input("Digite o valor de e: "))
+except ValueError:
+    print("❌ Erro: n e e devem ser números inteiros.")
+    exit()
 
 mensagem_criptografada = []
 
-# Percorre cada caractere da mensagem
+# Validação do tamanho de n
+for caractere in mensagem:
+    if ord(caractere) >= n:
+        print("❌ Erro: n é muito pequeno para os caracteres da mensagem.")
+        print("👉 Gere chaves maiores.")
+        exit()
+
+# Criptografia
 for caractere in mensagem:
     
-    # Converte caractere para número usando ASCII
     numero = ord(caractere)
     
-    # Aplica a fórmula da criptografia
     cifrado = pow(numero, e) % n
     
-    # Armazena o valor criptografado
     mensagem_criptografada.append(cifrado)
 
 # Exibe resultado
 print("\nMensagem criptografada:")
 print(mensagem_criptografada)
 
-# Salva em arquivo .rsa
-with open("mensagem.rsa", "w") as arquivo:
-    for numero in mensagem_criptografada:
-        arquivo.write(str(numero) + " ")
+print(f"\nQuantidade de caracteres criptografados: {len(mensagem_criptografada)}")
 
-print("\nArquivo 'mensagem.rsa' gerado com sucesso!")
+
+
+contador = 1
+
+# Procura um nome disponível
+while os.path.exists(f"mensagem{contador}.rsa"):
+    contador += 1
+
+nome_arquivo = f"mensagem{contador}.rsa"
+
+# Salva em arquivo .rsa
+with open(nome_arquivo, "w") as arquivo:
+    arquivo.write(" ".join(map(str, mensagem_criptografada)))
+
+print(f"\nArquivo '{nome_arquivo}' gerado com sucesso!")

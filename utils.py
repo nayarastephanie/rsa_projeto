@@ -22,7 +22,7 @@ def eh_primo(numero):
 # Função para gerar número primo aleatório
 def gerar_primo():
     while True:
-        numero = random.randint(50, 200)  # intervalo maior
+        numero = random.randint(100, 500)  # intervalo maior
         if eh_primo(numero):
             return numero
 
