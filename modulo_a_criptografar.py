@@ -1,60 +1,77 @@
 # modulo_a_criptografar.py
-
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt
+from rich.align import Align
 import os
 
-print("=== MÓDULO A - CRIPTOGRAFAR ===")
 
-# Entrada da mensagem
-mensagem = input("Digite a mensagem: ")
+console = Console()
 
-if not mensagem:
-    print("❌ Erro: a mensagem não pode estar vazia.")
-    exit()
+continuar = True
 
-# Entrada da chave pública
-try:
-    n = int(input("Digite o valor de n: "))
-    e = int(input("Digite o valor de e: "))
-except ValueError:
-    print("❌ Erro: n e e devem ser números inteiros.")
-    exit()
+#Função se encontra gerando um loop infinito
+def criptografar():
+  
+  if (continuar == True):
+    while True:
+        console.print(Panel.fit(Align.center("=== MÓDULO A - CRIPTOGRAFAR ==="), border_style='green'), justify='center')
 
-mensagem_criptografada = []
-
-# Validação do tamanho de n
-for caractere in mensagem:
-    if ord(caractere) >= n:
-        print("❌ Erro: n é muito pequeno para os caracteres da mensagem.")
-        print("👉 Gere chaves maiores.")
-        exit()
-
-# Criptografia
-for caractere in mensagem:
+        # Entrada da mensagem
+        mensagem = Prompt.ask("Digite a mensagem: ")
     
-    numero = ord(caractere)
-    
-    cifrado = pow(numero, e) % n
-    
-    mensagem_criptografada.append(cifrado)
+        
+        if not mensagem:
+                console.print(Panel.fit(Align.center("❌ Erro: a mensagem não pode estar vazia."), border_style='red'), justify='center')
+            
+                break
+            # Entrada da chave pública
+        try:
+                n = int(Prompt.ask("Digite o valor de n: "))
+                e = int(Prompt.ask("Digite o valor de e: "))
+        except ValueError:
+                console.print(Panel.fit(Align.center("❌ Erro: n e e devem ser números inteiros."), border_style='red'), justify='center')
+                break
 
-# Exibe resultado
-print("\nMensagem criptografada:")
-print(mensagem_criptografada)
+        mensagem_criptografada = []
 
-print(f"\nQuantidade de caracteres criptografados: {len(mensagem_criptografada)}")
+            # Validação do tamanho de n
+        for caractere in mensagem:
+            if ord(caractere) >= n:
+                console.print(Panel.fit(Align.center("❌ Erro: n é muito pequeno para os caracteres da mensagem."), border_style='red'), justify='center')
+                console.print(Panel.fit(Align.center("👉 Gere chaves maiores."), border_style='red'), justify='center')
+                break
+###############################################################
+        #Aprovado
+        # Criptografia
+        for caractere in mensagem:
+            
+            numero = ord(caractere)
+            
+            cifrado = pow(numero, e) % n
+            
+            mensagem_criptografada.append(cifrado)
+
+        # Exibe resultado
+        console.print(Panel.fit(Align.center("Mensagem criptografada:"), border_style='green'), justify='center')
+        console.print(mensagem_criptografada)
+
+        console.print(Panel.fit(Align.center(f"Quantidade de caracteres criptografados: {len(mensagem_criptografada)}"), border_style='green'), justify='center')
 
 
 
-contador = 1
+        contador = 1
 
-# Procura um nome disponível
-while os.path.exists(f"mensagem{contador}.rsa"):
-    contador += 1
+        # Procura um nome disponível
+        while os.path.exists(f"mensagem{contador}.rsa"):
+            contador += 1
 
-nome_arquivo = f"mensagem{contador}.rsa"
+        nome_arquivo = f"mensagem{contador}.rsa"
 
-# Salva em arquivo .rsa
-with open(nome_arquivo, "w") as arquivo:
-    arquivo.write(" ".join(map(str, mensagem_criptografada)))
+        # Salva em arquivo .rsa
+        with open(nome_arquivo, "w") as arquivo:
+            arquivo.write(" ".join(map(str, mensagem_criptografada)))
 
-print(f"\nArquivo '{nome_arquivo}' gerado com sucesso!")
+        console.print(Panel.fit(Align.center(f"Arquivo '{nome_arquivo}' gerado com sucesso!"), border_style='green'), justify='center')
+        continuar == False
+        return
