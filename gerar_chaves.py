@@ -56,7 +56,7 @@ def gerar_chaves():
     n = p * q
     phi = (p - 1) * (q - 1)
 
-    # ⚠️ NOVA: Escolha de e
+    # Escolha de e
     console.print(Panel.fit(Align.center("Escolha de e"), border_style="blue"), justify="center")
     entrada_e = Prompt.ask("Deseja inserir e manualmente? (s/n): ")
     
@@ -92,7 +92,7 @@ def gerar_chaves():
         console.print(Panel.fit(Align.center("❌ Erro ao calcular d."), border_style="red"), justify="center")
         return
 
-    # ✅ SALVAR CHAVES EM ARQUIVO
+    #  SALVAR CHAVES EM ARQUIVO
     chaves = {
         "p": p,
         "q": q,

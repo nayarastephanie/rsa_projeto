@@ -40,7 +40,7 @@ def calcular_inverso_modular(e, phi):
     return None
 
 
-# ✅ NOVA: Função para carregar chaves de arquivo
+# Função para carregar chaves de arquivo
 def carregar_chaves():
     import json
     try:
@@ -52,7 +52,7 @@ def carregar_chaves():
         return None
 
 
-# ✅ NOVA: Função para validar se n e d formam um par válido
+# Função para validar se n e d formam um par válido
 def validar_par_descriptografia(n, d):
     """
     Retorna um dicionário com informações sobre a validade do par (n, d)

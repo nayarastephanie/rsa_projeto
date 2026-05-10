@@ -15,7 +15,7 @@ def descifrar():
         console.print(Panel.fit(Align.center("=== MÓDULO B - DECIFRAR ==="), border_style='green'), justify='center')
         sleep(2)
 
-        # 📂 Listar arquivos disponíveis (.rsa)
+        #  Listar arquivos disponíveis (.rsa)
         arquivos = [f for f in os.listdir() if f.endswith(".rsa")]
 
         if not arquivos:
@@ -37,7 +37,7 @@ def descifrar():
             console.print(Panel.fit(Align.center("❌ Erro: n e d devem ser números inteiros."), border_style='red'), justify='center')
             continue
         
-        # ⚠️ VALIDAÇÕES CRÍTICAS
+        #  VALIDAÇÕES CRÍTICAS
         # Verifica se n >= 128 (mínimo para ASCII)
         if n < 128:
             console.print(Panel.fit(Align.center(f"❌ ERRO: n={n} é muito pequeno!\n👉 n deve ser >= 128"), border_style='red'), justify='center')
@@ -48,7 +48,7 @@ def descifrar():
             console.print(Panel.fit(Align.center(f"❌ ERRO: d={d} é inválido!\n👉 d deve ser > 0"), border_style='red'), justify='center')
             continue
         
-        # ⚠️ AVISO: Se d é muito grande, pode estar incorreto
+        #  AVISO: Se d é muito grande, pode estar incorreto
         if d > n:
             console.print(Panel.fit(Align.center(f"⚠️  AVISO: d={d} > n={n}!\n👉 Verifique se essas chaves correspondem\n👉 A descriptografia pode não funcionar!"), border_style='yellow'), justify='center')
             confirma = Prompt.ask("Deseja continuar? (s/n): ")
@@ -84,7 +84,7 @@ def descifrar():
             decifrado = pow(numero, d) % n
 
             try:
-                # ✅ Valida se o resultado é um char ASCII válido
+                #  Valida se o resultado é um char ASCII válido
                 if decifrado < 0 or decifrado > 127:
                     console.print(Panel.fit(Align.center(f"⚠️  AVISO: Valor {decifrado} fora do intervalo ASCII (0-127)\n👉 As chaves podem estar incorretas!"), border_style='yellow'), justify='center')
                 mensagem_original += chr(decifrado)

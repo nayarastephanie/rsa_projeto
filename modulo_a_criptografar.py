@@ -33,7 +33,7 @@ def criptografar():
                 console.print(Panel.fit(Align.center("❌ Erro: n e e devem ser números inteiros."), border_style='red'), justify='center')
                 continue
         
-        # ⚠️ VALIDAÇÕES CRÍTICAS
+        #  VALIDAÇÕES CRÍTICAS
         # Verifica se n >= 128 (mínimo para ASCII)
         if n < 128:
             console.print(Panel.fit(Align.center(f"❌ ERRO: n={n} é muito pequeno!\n👉 n deve ser >= 128"), border_style='red'), justify='center')
@@ -46,7 +46,7 @@ def criptografar():
 
         mensagem_criptografada = []
         
-        # ⚠️ VALIDAÇÃO: Todos os caracteres devem ser menores que n
+        #  VALIDAÇÃO: Todos os caracteres devem ser menores que n
         caractere_invalido = False
         for caractere in mensagem:
             if ord(caractere) >= n:
