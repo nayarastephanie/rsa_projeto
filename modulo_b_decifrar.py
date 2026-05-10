@@ -4,6 +4,7 @@ from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.align import Align
 from time import sleep
+from utils import validar_par_descriptografia
 console = Console()
 import os
 continuar = True
@@ -34,7 +35,25 @@ def descifrar():
             d = int(Prompt.ask("Digite o valor de d: "))
         except ValueError:
             console.print(Panel.fit(Align.center("❌ Erro: n e d devem ser números inteiros."), border_style='red'), justify='center')
-            break
+            continue
+        
+        # ⚠️ VALIDAÇÕES CRÍTICAS
+        # Verifica se n >= 128 (mínimo para ASCII)
+        if n < 128:
+            console.print(Panel.fit(Align.center(f"❌ ERRO: n={n} é muito pequeno!\n👉 n deve ser >= 128"), border_style='red'), justify='center')
+            continue
+        
+        # Verifica se d > 0
+        if d <= 0:
+            console.print(Panel.fit(Align.center(f"❌ ERRO: d={d} é inválido!\n👉 d deve ser > 0"), border_style='red'), justify='center')
+            continue
+        
+        # ⚠️ AVISO: Se d é muito grande, pode estar incorreto
+        if d > n:
+            console.print(Panel.fit(Align.center(f"⚠️  AVISO: d={d} > n={n}!\n👉 Verifique se essas chaves correspondem\n👉 A descriptografia pode não funcionar!"), border_style='yellow'), justify='center')
+            confirma = Prompt.ask("Deseja continuar? (s/n): ")
+            if confirma.lower() != 's':
+                continue
 
         # Leitura do arquivo escolhido
         try:
@@ -65,9 +84,12 @@ def descifrar():
             decifrado = pow(numero, d) % n
 
             try:
+                # ✅ Valida se o resultado é um char ASCII válido
+                if decifrado < 0 or decifrado > 127:
+                    console.print(Panel.fit(Align.center(f"⚠️  AVISO: Valor {decifrado} fora do intervalo ASCII (0-127)\n👉 As chaves podem estar incorretas!"), border_style='yellow'), justify='center')
                 mensagem_original += chr(decifrado)
-            except ValueError:
-                console.print(Panel.fit(Align.center("❌ Erro ao converter número para caractere."), border_style='red'), justify='center')
+            except (ValueError, OverflowError):
+                console.print(Panel.fit(Align.center("❌ Erro ao converter número para caractere.\n👉 As chaves n e d parecem estar incorretas."), border_style='red'), justify='center')
                 break
 
         # Exibe resultado
