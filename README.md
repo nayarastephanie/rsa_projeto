@@ -80,3 +80,5 @@ A conversão de caracteres foi feita utilizando ASCII, permitindo suportar:
 1. Execute gerar_chaves.py
 2. Execute modulo_a_criptografar.py
 3. Execute modulo_b_decifrar.py
+
+---
