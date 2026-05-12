@@ -32,12 +32,26 @@ def gerar_primo():
             return numero
 
 
-# Função para calcular o inverso modular (chave privada)
+# Função para calcular o inverso modular (chave privada) - Algoritmo Euclidiano Estendido
 def calcular_inverso_modular(e, phi):
-    for d in range(1, phi):
-        if (d * e) % phi == 1:
-            return d
-    return None
+    """
+    Calcula o inverso modular de e módulo phi usando o Algoritmo Euclidiano Estendido.
+    Muito mais eficiente que força bruta!
+    """
+    def extended_gcd(a, b):
+        if a == 0:
+            return b, 0, 1
+        gcd, x1, y1 = extended_gcd(b % a, a)
+        x = y1 - (b // a) * x1
+        y = x1
+        return gcd, x, y
+    
+    gcd, x, _ = extended_gcd(e % phi, phi)
+    
+    if gcd != 1:
+        return None  # Inverso modular não existe
+    
+    return (x % phi + phi) % phi
 
 
 # Função para carregar chaves de arquivo

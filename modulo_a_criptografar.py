@@ -59,7 +59,7 @@ def criptografar():
         # ✅ CRIPTOGRAFIA
         for caractere in mensagem:
             numero = ord(caractere)
-            cifrado = pow(numero, e) % n
+            cifrado = pow(numero, e, n)  # Exponenciação modular eficiente!
             mensagem_criptografada.append(cifrado)
 
         # Exibe resultado

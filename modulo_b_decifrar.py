@@ -81,7 +81,7 @@ def descifrar():
                 console.print(Panel.fit(Align.center("❌ Erro: conteúdo inválido no arquivo."), border_style='red'), justify='center')
                 break
 
-            decifrado = pow(numero, d) % n
+            decifrado = pow(numero, d, n)  # Exponenciação modular eficiente!
 
             try:
                 #  Valida se o resultado é um char ASCII válido
