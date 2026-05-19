@@ -9,13 +9,38 @@ import os
 
 console = Console()
 
+def confirmar(prompt_text: str, max_attempts: int | None = None, default: bool | None = None) -> bool:
+    """Lê uma resposta de confirmação aceitando variações de 'sim' e 'não'.
+
+    - Usa `casefold()` para aceitar maiúsculas e variantes Unicode.
+    - `max_attempts`: se fornecido, após N respostas inválidas retorna `default` ou lança `ValueError`.
+    - `default`: valor retornado quando `max_attempts` é excedido (se None, levanta erro).
+    """
+    yes = {'s', 'sim', 'y', 'yes'}
+    no = {'n', 'nao', 'não', 'no'}
+    attempts = 0
+
+    while True:
+        resposta = Prompt.ask(prompt_text).strip().casefold()
+        attempts += 1
+
+        if resposta in yes:
+            return True
+        if resposta in no:
+            return False
+
+        console.print(Panel.fit(Align.center("Resposta inválida. Digite 's'/'sim' ou 'n'/'não'."), border_style="red"), justify="center")
+
+        if max_attempts is not None and attempts >= max_attempts:
+            if default is not None:
+                return default
+            raise ValueError(f"Número máximo de tentativas excedido para: {prompt_text}")
+
 def gerar_chaves():
     console.print(Panel.fit(Align.center("=== GERADOR DE CHAVES RSA ==="), title="Gerador de Chaves RSA", title_align="center", border_style="green"), justify="center")
 
-    escolha = Prompt.ask("Deseja inserir os primos manualmente? (s/n): ")
-
     # Escolha dos primos
-    if escolha.lower() == 's':
+    if confirmar("Deseja inserir os primos manualmente? (s/n): "):
         while True:
             try:
                 p = int(Prompt.ask("Digite o valor de p: "))
@@ -58,9 +83,9 @@ def gerar_chaves():
 
     # Escolha de e
     console.print(Panel.fit(Align.center("Escolha de e"), border_style="blue"), justify="center")
-    entrada_e = Prompt.ask("Deseja inserir e manualmente? (s/n): ")
+    entrada_e = confirmar("Deseja inserir e manualmente? (s/n): ")
     
-    if entrada_e.lower() == 's':
+    if entrada_e:
         while True:
             try:
                 e = int(Prompt.ask("Digite o valor de e: "))
